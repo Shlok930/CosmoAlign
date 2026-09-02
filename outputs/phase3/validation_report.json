@@ -1,0 +1,62 @@
+{
+  "pair_id": "pair_001",
+  "final_verdict": "UNCERTAIN",
+  "confidence_level": "MEDIUM",
+  "heuristic_quality_score": 100.0,
+  "diagnostic_reasons": [
+    "Registration passed critical gates but spatial coverage or independent validation was inconclusive"
+  ],
+  "gates": {
+    "DATA_VALIDATION": {
+      "status": "PASS",
+      "source_sha256": "bd15b68bda51...",
+      "reference_sha256": "6d70f229b292...",
+      "source_valid_pixels_pct": 100.0,
+      "reference_valid_pixels_pct": 100.0
+    },
+    "FEATURE_VALIDATION": {
+      "status": "PASS",
+      "source_keypoints": 21961,
+      "reference_keypoints": 4451
+    },
+    "MATCH_VALIDATION": {
+      "status": "PASS",
+      "raw_knn_matches": 21961,
+      "good_lowe_matches": 50,
+      "mutual_nn_crosscheck_matches": 2371
+    },
+    "RANSAC_VALIDATION": {
+      "status": "PASS",
+      "inlier_count": 23,
+      "inlier_ratio_pct": 46.0
+    },
+    "SPATIAL_VALIDATION": {
+      "status": "PASS",
+      "occupied_cells": 7,
+      "total_cells": 9,
+      "coverage_ratio_pct": 77.8,
+      "spatial_entropy": 0.7738,
+      "is_single_cluster": false
+    },
+    "GEOMETRY_VALIDATION": {
+      "status": "PASS",
+      "homography_sane": true,
+      "det_H": 0.226266,
+      "sanity_notes": "Homography is geometrically sane (Area ratio: 90.6% of reference frame, det=0.2263)."
+    },
+    "REPROJECTION_VALIDATION": {
+      "status": "PASS",
+      "rmse_px": 1.4157,
+      "median_px": 0.9456,
+      "p95_px": 3.0491,
+      "max_px": 3.3146
+    },
+    "INDEPENDENT_VALIDATION": {
+      "status": "FAIL",
+      "notes": "Independent validation RMSE: 203.70 px on 25 unseen matches",
+      "train_matches": 25,
+      "validation_matches": 25,
+      "val_rmse_px": 203.6992
+    }
+  }
+}

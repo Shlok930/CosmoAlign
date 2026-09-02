@@ -1,0 +1,22 @@
+{
+  "pair_id": "pair_001",
+  "same_region_verified": true,
+  "source_mission": "Chandrayaan-2",
+  "source_instrument": "OHRC",
+  "source_product": "ch2_ohr_ncp_20200915T103000_d_img.tif",
+  "source_sha256": "bd15b68bda5158070734794a39cf73254e90927e424dc0bffd299d6524c8b744",
+  "source_acquisition_time": "2020-09-15T10:30:00.000Z",
+  "source_resolution_m_per_px": 0.25,
+  "source_footprint": "72.85S, 43.10E to 73.05S, 43.40E (Boguslawsky E Region)",
+  "reference_mission": "LRO",
+  "reference_instrument": "NAC",
+  "reference_product": "M1105432100RE_CAL.tif",
+  "reference_sha256": "6d70f229b292362f9273489d06e9adcfde991a133a765305953d1200cd7f1581",
+  "reference_acquisition_time": "2015-06-22T14:15:00.000Z",
+  "reference_resolution_m_per_px": 0.50,
+  "reference_footprint": "72.80S, 43.00E to 73.10S, 43.50E (Boguslawsky E Region)",
+  "nominal_scale_ratio_ref_to_source": 2.0,
+  "solar_incidence_angle_source_deg": 64.5,
+  "solar_incidence_angle_ref_deg": 78.2,
+  "selection_notes": "Verified footprint overlap over Boguslawsky E crater rim near lunar south pole. Features significant illumination and sun incidence angle differences between Chandrayaan-2 OHRC and LRO NAC acquisitions."
+}

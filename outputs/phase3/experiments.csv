@@ -1,0 +1,4 @@
+experiment,description,source_keypoints,ref_keypoints,good_matches,inliers,inlier_ratio_pct,rmse_px,coverage_pct,verdict
+exp_001_baseline,Baseline (Percentile Stretch),21961,4451,50,23,46.0,1.4157,77.8,UNCERTAIN
+exp_002_clahe,CLAHE Enhanced,21130,4441,49,30,61.22,1.6806,88.9,UNCERTAIN
+exp_003_percentile,Radiometric Stretch 1%-99%,21774,4309,55,23,41.82,1.6441,66.7,UNCERTAIN

@@ -1,0 +1,15 @@
+{
+  "pair_id": "pair_001",
+  "source_keypoints": 21961,
+  "reference_keypoints": 4451,
+  "raw_matches": 21961,
+  "good_matches": 50,
+  "ransac_inliers": 23,
+  "inlier_ratio": 46.0,
+  "rmse": 1.4156506061553955,
+  "homography_sane": true,
+  "sanity_notes": "Homography is geometrically sane (Area ratio: 90.6% of reference frame, det=0.2263).",
+  "spatial_coverage_ratio": 0.7778,
+  "spatial_entropy": 0.7738,
+  "registration_success": true
+}
