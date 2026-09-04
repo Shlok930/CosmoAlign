@@ -1,0 +1,13 @@
+pair_id,viewpoint_stress_level,model,source_keypoints,reference_keypoints,raw_matches,good_matches,inliers,inlier_ratio_pct,spatial_coverage_pct,rmse_px,median_px,p95_px,geometry_sanity,independent_validation,final_verdict,failure,physical_scale_ratio_ref_to_source,scale_metadata_consistent
+pair_v1,5deg,Homography,21416,26361,21416,3762,3746,99.57469431153642,100.0,0.3924,0.1984,0.6756,PASS,FAIL,UNCERTAIN,,1.0,True
+pair_v1,5deg,Affine,21416,26361,21416,3762,,,,,,,,NOT_AVAILABLE,FAILED,"OpenCV(4.11.0) D:\a\opencv-python\opencv-python\opencv\modules\core\src\matmul.dispatch.cpp:458: error: (-215:Assertion failed) scn == m.cols || scn + 1 == m.cols in function 'cv::transform'
+",1.0,True
+pair_v2,15deg,Homography,21416,24945,21416,2911,2890,99.27859841978702,100.0,0.4331,0.214,0.6906,PASS,FAIL,UNCERTAIN,,1.0,True
+pair_v2,15deg,Affine,21416,24945,21416,2911,,,,,,,,NOT_AVAILABLE,FAILED,"OpenCV(4.11.0) D:\a\opencv-python\opencv-python\opencv\modules\core\src\matmul.dispatch.cpp:458: error: (-215:Assertion failed) scn == m.cols || scn + 1 == m.cols in function 'cv::transform'
+",1.0,True
+pair_v3,30deg,Homography,21416,23341,21416,1341,1326,98.88143176733782,100.0,0.5377,0.2817,0.9184,PASS,FAIL,UNCERTAIN,,1.0,True
+pair_v3,30deg,Affine,21416,23341,21416,1341,,,,,,,,NOT_AVAILABLE,FAILED,"OpenCV(4.11.0) D:\a\opencv-python\opencv-python\opencv\modules\core\src\matmul.dispatch.cpp:458: error: (-215:Assertion failed) scn == m.cols || scn + 1 == m.cols in function 'cv::transform'
+",1.0,True
+pair_v4,45deg,Homography,21416,20291,21416,335,308,91.94029850746269,100.0,0.8912,0.3776,1.8794,PASS,FAIL,UNCERTAIN,,1.0,True
+pair_v4,45deg,Affine,21416,20291,21416,335,,,,,,,,NOT_AVAILABLE,FAILED,"OpenCV(4.11.0) D:\a\opencv-python\opencv-python\opencv\modules\core\src\matmul.dispatch.cpp:458: error: (-215:Assertion failed) scn == m.cols || scn + 1 == m.cols in function 'cv::transform'
+",1.0,True

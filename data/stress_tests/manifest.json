@@ -1,0 +1,148 @@
+{
+  "pairs": [
+    {
+      "pair_id": "pair_s1",
+      "category": "scale",
+      "stress_level": "1x",
+      "path": "data/stress_tests/scale/pair_s1",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 0.0,
+      "viewpoint_rotation_deg": 0.0
+    },
+    {
+      "pair_id": "pair_s2",
+      "category": "scale",
+      "stress_level": "2x",
+      "path": "data/stress_tests/scale/pair_s2",
+      "scale_ratio_ref_to_source": 2.0,
+      "illumination_difference_deg": 0.0,
+      "viewpoint_rotation_deg": 0.0
+    },
+    {
+      "pair_id": "pair_s3",
+      "category": "scale",
+      "stress_level": "4x",
+      "path": "data/stress_tests/scale/pair_s3",
+      "scale_ratio_ref_to_source": 4.0,
+      "illumination_difference_deg": 0.0,
+      "viewpoint_rotation_deg": 0.0
+    },
+    {
+      "pair_id": "pair_s4",
+      "category": "scale",
+      "stress_level": "8x",
+      "path": "data/stress_tests/scale/pair_s4",
+      "scale_ratio_ref_to_source": 8.0,
+      "illumination_difference_deg": 0.0,
+      "viewpoint_rotation_deg": 0.0
+    },
+    {
+      "pair_id": "pair_i1",
+      "category": "illumination",
+      "stress_level": "10deg",
+      "path": "data/stress_tests/illumination/pair_i1",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 10.0,
+      "viewpoint_rotation_deg": 0.0
+    },
+    {
+      "pair_id": "pair_i2",
+      "category": "illumination",
+      "stress_level": "30deg",
+      "path": "data/stress_tests/illumination/pair_i2",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 30.0,
+      "viewpoint_rotation_deg": 0.0
+    },
+    {
+      "pair_id": "pair_i3",
+      "category": "illumination",
+      "stress_level": "50deg",
+      "path": "data/stress_tests/illumination/pair_i3",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 50.0,
+      "viewpoint_rotation_deg": 0.0
+    },
+    {
+      "pair_id": "pair_i4",
+      "category": "illumination",
+      "stress_level": "70deg",
+      "path": "data/stress_tests/illumination/pair_i4",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 70.0,
+      "viewpoint_rotation_deg": 0.0
+    },
+    {
+      "pair_id": "pair_v1",
+      "category": "viewpoint",
+      "stress_level": "5deg",
+      "path": "data/stress_tests/viewpoint/pair_v1",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 0.0,
+      "viewpoint_rotation_deg": 5.0
+    },
+    {
+      "pair_id": "pair_v2",
+      "category": "viewpoint",
+      "stress_level": "15deg",
+      "path": "data/stress_tests/viewpoint/pair_v2",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 0.0,
+      "viewpoint_rotation_deg": 15.0
+    },
+    {
+      "pair_id": "pair_v3",
+      "category": "viewpoint",
+      "stress_level": "30deg",
+      "path": "data/stress_tests/viewpoint/pair_v3",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 0.0,
+      "viewpoint_rotation_deg": 30.0
+    },
+    {
+      "pair_id": "pair_v4",
+      "category": "viewpoint",
+      "stress_level": "45deg",
+      "path": "data/stress_tests/viewpoint/pair_v4",
+      "scale_ratio_ref_to_source": 1.0,
+      "illumination_difference_deg": 0.0,
+      "viewpoint_rotation_deg": 45.0
+    },
+    {
+      "pair_id": "pair_c1",
+      "category": "combined",
+      "stress_level": "scale_2x_illumination_30deg_viewpoint_15deg",
+      "path": "data/stress_tests/combined/pair_c1",
+      "scale_ratio_ref_to_source": 2.0,
+      "illumination_difference_deg": 30.0,
+      "viewpoint_rotation_deg": 15.0
+    },
+    {
+      "pair_id": "pair_c2",
+      "category": "combined",
+      "stress_level": "scale_4x_illumination_50deg_viewpoint_30deg",
+      "path": "data/stress_tests/combined/pair_c2",
+      "scale_ratio_ref_to_source": 4.0,
+      "illumination_difference_deg": 50.0,
+      "viewpoint_rotation_deg": 30.0
+    },
+    {
+      "pair_id": "pair_c3",
+      "category": "combined",
+      "stress_level": "scale_8x_illumination_30deg_viewpoint_45deg",
+      "path": "data/stress_tests/combined/pair_c3",
+      "scale_ratio_ref_to_source": 8.0,
+      "illumination_difference_deg": 30.0,
+      "viewpoint_rotation_deg": 45.0
+    },
+    {
+      "pair_id": "pair_c4",
+      "category": "combined",
+      "stress_level": "scale_2x_illumination_70deg_viewpoint_30deg",
+      "path": "data/stress_tests/combined/pair_c4",
+      "scale_ratio_ref_to_source": 2.0,
+      "illumination_difference_deg": 70.0,
+      "viewpoint_rotation_deg": 30.0
+    }
+  ]
+}

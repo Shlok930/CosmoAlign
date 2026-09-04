@@ -1,0 +1,62 @@
+{
+  "Scale": {
+    "pairs": 4,
+    "mean_inlier_ratio_pct": 59.593695777906305,
+    "minimum_inlier_ratio_pct": 34.61538461538461,
+    "maximum_inlier_ratio_pct": 100.0,
+    "mean_rmse_px": 3.523275,
+    "minimum_rmse_px": 0.0,
+    "maximum_rmse_px": 11.3837,
+    "mean_spatial_coverage_pct": 80.575,
+    "geometry_pass_pct": 75.0,
+    "geometry_fail_pct": 25.0,
+    "validated_pct": null,
+    "uncertain_pct": null,
+    "failed_pct": null
+  },
+  "Illumination": {
+    "pairs": 16,
+    "mean_inlier_ratio_pct": 39.53592821208562,
+    "minimum_inlier_ratio_pct": 13.513513513513514,
+    "maximum_inlier_ratio_pct": 99.00649598777225,
+    "mean_rmse_px": 10.197375000000001,
+    "minimum_rmse_px": 0.0,
+    "maximum_rmse_px": 69.8257,
+    "mean_spatial_coverage_pct": 53.443749999999994,
+    "geometry_pass_pct": 37.5,
+    "geometry_fail_pct": 62.5,
+    "validated_pct": null,
+    "uncertain_pct": null,
+    "failed_pct": null
+  },
+  "Viewpoint Homography": {
+    "pairs": 4,
+    "mean_inlier_ratio_pct": 97.41875575153098,
+    "minimum_inlier_ratio_pct": 91.94029850746269,
+    "maximum_inlier_ratio_pct": 99.57469431153642,
+    "mean_rmse_px": 0.5636,
+    "minimum_rmse_px": 0.3924,
+    "maximum_rmse_px": 0.8912,
+    "mean_spatial_coverage_pct": 100.0,
+    "geometry_pass_pct": 100.0,
+    "geometry_fail_pct": 0.0,
+    "validated_pct": 0.0,
+    "uncertain_pct": 100.0,
+    "failed_pct": 0.0
+  },
+  "Combined": {
+    "pairs": 8,
+    "mean_inlier_ratio_pct": 45.92184788895315,
+    "minimum_inlier_ratio_pct": 24.0,
+    "maximum_inlier_ratio_pct": 100.0,
+    "mean_rmse_px": 6.633425,
+    "minimum_rmse_px": 0.0,
+    "maximum_rmse_px": 21.406,
+    "mean_spatial_coverage_pct": 68.075,
+    "geometry_pass_pct": 37.5,
+    "geometry_fail_pct": 62.5,
+    "validated_pct": 12.5,
+    "uncertain_pct": 25.0,
+    "failed_pct": 62.5
+  }
+}

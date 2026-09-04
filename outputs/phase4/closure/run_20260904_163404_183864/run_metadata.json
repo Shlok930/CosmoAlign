@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-09-04T11:04:04.201227+00:00",
+  "git_branch": "robustness",
+  "git_commit": "43dc7ac56df6e7ddc0fc13da6abef625289d524d",
+  "working_tree_dirty": true,
+  "python_version": "3.11.3",
+  "opencv_version": "4.11.0",
+  "numpy_version": "1.26.4",
+  "experiment_name": "Phase 4 closure",
+  "experiments": [
+    "scale",
+    "illumination",
+    "combined",
+    "step7",
+    "report"
+  ],
+  "dataset_manifest_sha256": "336153cbff02d3d63a8b61ebfcc519c07a3a37cd26b46fad1327ca2c32a2a13e",
+  "random_seed": 42,
+  "ransac_threshold_px": 5.0,
+  "lowe_ratio_threshold": 0.75,
+  "sift_parameters": {
+    "nfeatures": 0,
+    "contrastThreshold": 0.04,
+    "edgeThreshold": 10.0,
+    "sigma": 1.6
+  }
+}

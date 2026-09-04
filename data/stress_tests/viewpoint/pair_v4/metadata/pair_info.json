@@ -1,0 +1,54 @@
+{
+  "pair_id": "pair_v4",
+  "same_region_verified": true,
+  "source_mission": "Chandrayaan-2",
+  "source_instrument": "OHRC",
+  "source_product": "ch2_ohr_ncp_20200915T103000_d_img.tif",
+  "source_sha256": "7ce6685fa1d2c0b30303368610dac1008e7b03c6a9662db0bd0451f555e55c99",
+  "source_acquisition_time": "2020-09-15T10:30:00.000Z",
+  "source_resolution_m_per_px": 0.25,
+  "source_footprint": "72.85S, 43.10E to 73.05S, 43.40E (Boguslawsky E Region)",
+  "reference_mission": "LRO",
+  "reference_instrument": "NAC",
+  "reference_product": "M1105432100RE_CAL.tif",
+  "reference_sha256": "ef33cdf1f27a39d63e8473c1fd6fccb7129440ad576a77634d4ae90c9e47f619",
+  "reference_acquisition_time": "2015-06-22T14:15:00.000Z",
+  "reference_resolution_m_per_px": 0.25,
+  "reference_footprint": "72.80S, 43.00E to 73.10S, 43.50E (Boguslawsky E Region)",
+  "nominal_scale_ratio_ref_to_source": 1.0,
+  "solar_incidence_angle_source_deg": 64.5,
+  "solar_incidence_angle_ref_deg": 64.5,
+  "selection_notes": "Controlled synthetic lunar stress-test pair based on the shared generated terrain scene.",
+  "stress_category": "viewpoint",
+  "stress_level": "45deg",
+  "illumination_difference_deg": 0.0,
+  "source_sun_azimuth_deg": 0.0,
+  "reference_sun_azimuth_deg": 0.0,
+  "viewpoint_rotation_deg": 45.0,
+  "ground_truth_transform": {
+    "source_to_reference_homography": [
+      [
+        0.7835935882988755,
+        -0.07916887059310536,
+        132.7042752339995
+      ],
+      [
+        0.036336039371708484,
+        0.8706391003380631,
+        -16.670882873766757
+      ],
+      [
+        4.7911444319235875e-06,
+        -0.000132235586321091,
+        1.0
+      ]
+    ],
+    "scale_ratio_ref_to_source": 1.0,
+    "illumination_difference_deg": 0.0,
+    "source_sun_elevation_deg": 64.5,
+    "source_sun_azimuth_deg": 0.0,
+    "reference_sun_elevation_deg": 64.5,
+    "reference_sun_azimuth_deg": 0.0,
+    "viewpoint_rotation_deg": 45.0
+  }
+}

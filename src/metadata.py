@@ -69,6 +69,68 @@ def calculate_scale_ratio(
     return ratio, inv_ratio
 
 
+def build_scale_context(pair_info: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Builds scale metadata/telemetry for a registration pair.
+
+    Physical GSD ratio and synthetic stress level are intentionally kept
+    separate. The physical ratio describes the source/reference products,
+    while stress_level describes the artificial scale stress applied by
+    the Phase 4 stress-test generator.
+
+    Args:
+        pair_info: Pair metadata dictionary.
+
+    Returns:
+        Dictionary containing scale context and metadata consistency status.
+    """
+    source_gsd = float(pair_info.get("source_resolution_m_per_px", 0.0))
+    reference_gsd = float(pair_info.get("reference_resolution_m_per_px", 0.0))
+
+    calculated_ratio, inverse_ratio = calculate_scale_ratio(
+        source_gsd,
+        reference_gsd
+    )
+
+    nominal_ratio = pair_info.get(
+        "nominal_scale_ratio_ref_to_source",
+        None
+    )
+
+    if nominal_ratio is not None:
+        nominal_ratio = float(nominal_ratio)
+        ratio_consistent = bool(
+            np.isclose(
+                calculated_ratio,
+                nominal_ratio,
+                rtol=1e-3,
+                atol=1e-6
+            )
+        )
+    else:
+        ratio_consistent = False
+
+    stress_category = pair_info.get("stress_category")
+    stress_level = pair_info.get("stress_level")
+
+    if stress_level is not None:
+        try:
+            stress_level = float(stress_level)
+        except (TypeError, ValueError):
+            pass
+
+    return {
+        "source_gsd_m_per_px": source_gsd,
+        "reference_gsd_m_per_px": reference_gsd,
+        "calculated_ref_to_source_ratio": calculated_ratio,
+        "calculated_source_to_ref_ratio": inverse_ratio,
+        "metadata_nominal_ref_to_source_ratio": nominal_ratio,
+        "ratio_consistent": ratio_consistent,
+        "stress_category": stress_category,
+        "stress_level": stress_level
+    }
+
+
 def format_metadata_report(
     source_stats: Dict[str, Any],
     ref_stats: Dict[str, Any],
