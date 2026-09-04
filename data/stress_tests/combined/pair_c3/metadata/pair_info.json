@@ -1,0 +1,54 @@
+{
+  "pair_id": "pair_c3",
+  "same_region_verified": true,
+  "source_mission": "Chandrayaan-2",
+  "source_instrument": "OHRC",
+  "source_product": "ch2_ohr_ncp_20200915T103000_d_img.tif",
+  "source_sha256": "7ce6685fa1d2c0b30303368610dac1008e7b03c6a9662db0bd0451f555e55c99",
+  "source_acquisition_time": "2020-09-15T10:30:00.000Z",
+  "source_resolution_m_per_px": 0.25,
+  "source_footprint": "72.85S, 43.10E to 73.05S, 43.40E (Boguslawsky E Region)",
+  "reference_mission": "LRO",
+  "reference_instrument": "NAC",
+  "reference_product": "M1105432100RE_CAL.tif",
+  "reference_sha256": "f0480ec35c2fbb44c8087f9b9cb5d1b54be0371f6ac10f54c370d38217ee4136",
+  "reference_acquisition_time": "2015-06-22T14:15:00.000Z",
+  "reference_resolution_m_per_px": 2.0,
+  "reference_footprint": "72.80S, 43.00E to 73.10S, 43.50E (Boguslawsky E Region)",
+  "nominal_scale_ratio_ref_to_source": 8.0,
+  "solar_incidence_angle_source_deg": 64.5,
+  "solar_incidence_angle_ref_deg": 49.5,
+  "selection_notes": "Controlled synthetic lunar stress-test pair based on the shared generated terrain scene.",
+  "stress_category": "combined",
+  "stress_level": "scale_8x_illumination_30deg_viewpoint_45deg",
+  "illumination_difference_deg": 30.0,
+  "source_sun_azimuth_deg": 0.0,
+  "reference_sun_azimuth_deg": 50.00689341441802,
+  "viewpoint_rotation_deg": 45.0,
+  "ground_truth_transform": {
+    "source_to_reference_homography": [
+      [
+        0.09794919853735944,
+        -0.00989610882413817,
+        16.58803440424994
+      ],
+      [
+        0.0045420049214635605,
+        0.10882988754225789,
+        -2.0838603592208447
+      ],
+      [
+        4.7911444319235875e-06,
+        -0.000132235586321091,
+        1.0
+      ]
+    ],
+    "scale_ratio_ref_to_source": 8.0,
+    "illumination_difference_deg": 30.0,
+    "source_sun_elevation_deg": 64.5,
+    "source_sun_azimuth_deg": 0.0,
+    "reference_sun_elevation_deg": 49.5,
+    "reference_sun_azimuth_deg": 50.00689341441802,
+    "viewpoint_rotation_deg": 45.0
+  }
+}

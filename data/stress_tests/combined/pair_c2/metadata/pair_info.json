@@ -1,0 +1,54 @@
+{
+  "pair_id": "pair_c2",
+  "same_region_verified": true,
+  "source_mission": "Chandrayaan-2",
+  "source_instrument": "OHRC",
+  "source_product": "ch2_ohr_ncp_20200915T103000_d_img.tif",
+  "source_sha256": "7ce6685fa1d2c0b30303368610dac1008e7b03c6a9662db0bd0451f555e55c99",
+  "source_acquisition_time": "2020-09-15T10:30:00.000Z",
+  "source_resolution_m_per_px": 0.25,
+  "source_footprint": "72.85S, 43.10E to 73.05S, 43.40E (Boguslawsky E Region)",
+  "reference_mission": "LRO",
+  "reference_instrument": "NAC",
+  "reference_product": "M1105432100RE_CAL.tif",
+  "reference_sha256": "33593a2c2444f863e2fc1176b88942b63b68f0a0c80e5162fd8686231f1183b8",
+  "reference_acquisition_time": "2015-06-22T14:15:00.000Z",
+  "reference_resolution_m_per_px": 1.0,
+  "reference_footprint": "72.80S, 43.00E to 73.10S, 43.50E (Boguslawsky E Region)",
+  "nominal_scale_ratio_ref_to_source": 4.0,
+  "solar_incidence_angle_source_deg": 64.5,
+  "solar_incidence_angle_ref_deg": 39.5,
+  "selection_notes": "Controlled synthetic lunar stress-test pair based on the shared generated terrain scene.",
+  "stress_category": "combined",
+  "stress_level": "scale_4x_illumination_50deg_viewpoint_30deg",
+  "illumination_difference_deg": 50.0,
+  "source_sun_azimuth_deg": 0.0,
+  "reference_sun_azimuth_deg": 78.06947039749164,
+  "viewpoint_rotation_deg": 30.0,
+  "ground_truth_transform": {
+    "source_to_reference_homography": [
+      [
+        0.21872712758222082,
+        -0.010888794151817496,
+        19.17562058016501
+      ],
+      [
+        0.00907228323196268,
+        0.23222422590235192,
+        -4.738343236744669
+      ],
+      [
+        2.63344801446638e-06,
+        -7.268316519927209e-05,
+        1.0
+      ]
+    ],
+    "scale_ratio_ref_to_source": 4.0,
+    "illumination_difference_deg": 50.0,
+    "source_sun_elevation_deg": 64.5,
+    "source_sun_azimuth_deg": 0.0,
+    "reference_sun_elevation_deg": 39.5,
+    "reference_sun_azimuth_deg": 78.06947039749164,
+    "viewpoint_rotation_deg": 30.0
+  }
+}

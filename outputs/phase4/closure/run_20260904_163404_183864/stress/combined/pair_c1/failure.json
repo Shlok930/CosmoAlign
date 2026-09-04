@@ -1,0 +1,14 @@
+{
+  "pair_id": "pair_c1",
+  "stress_category": "combined",
+  "stress_level": "scale_2x_illumination_30deg_viewpoint_15deg",
+  "failure_stage": "geometry_or_validation",
+  "failure_reason": "FAIL: Degenerate Homography: Determinant is non-positive (-0.003748), indicating image reflection/flip.",
+  "good_matches": 20,
+  "inliers": 7,
+  "inlier_ratio_pct": 35.0,
+  "rmse_px": 1.9208,
+  "spatial_coverage_pct": 66.7,
+  "geometry_status": "FAIL: Degenerate Homography: Determinant is non-positive (-0.003748), indicating image reflection/flip.",
+  "visualization_status": "unavailable"
+}

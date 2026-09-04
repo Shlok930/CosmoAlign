@@ -25,7 +25,12 @@ from config import (
     DEFAULT_DEBUG_MODE
 )
 from image_loader import load_image, to_grayscale, compute_file_sha256
-from metadata import inspect_image_stats, calculate_scale_ratio, format_metadata_report
+from metadata import (
+    inspect_image_stats,
+    calculate_scale_ratio,
+    build_scale_context,
+    format_metadata_report
+)
 from lunar_data import load_lunar_pair, create_display_visualization
 from preprocessing import apply_clahe, apply_percentile_stretch, create_valid_mask
 from feature_detection import extract_sift_features, get_keypoint_debug_info
@@ -45,6 +50,264 @@ from visualization import (
 )
 from evaluation import analyze_inlier_spatial_distribution, check_homography_sanity, compute_reprojection_stats
 from validation import ScientificValidator, format_validation_summary_console
+
+
+def run_phase4_illumination_experiments(
+    data_dir: str = "data",
+    output_dir: str = "outputs/phase4/illumination",
+    ratio_threshold: float = DEFAULT_LOWE_RATIO_THRESHOLD,
+    ransac_threshold: float = DEFAULT_RANSAC_REPROJ_THRESHOLD
+) -> bool:
+    """Run controlled preprocessing experiments across the illumination stress pairs."""
+    stress_pairs = [
+        ("pair_i1", "10deg"),
+        ("pair_i2", "30deg"),
+        ("pair_i3", "50deg"),
+        ("pair_i4", "70deg")
+    ]
+    preprocessing_variants = [
+        ("illum_001_2_98", "2%-98% Percentile Stretch", 2.0, 98.0, False),
+        ("illum_002_1_99", "1%-99% Percentile Stretch", 1.0, 99.0, False),
+        ("illum_003_2_98_clahe", "2%-98% Stretch + CLAHE", 2.0, 98.0, True),
+        ("illum_004_1_99_clahe", "1%-99% Stretch + CLAHE", 1.0, 99.0, True)
+    ]
+    experiment_rows = []
+    report_groups = []
+
+    def metric_or_none(mapping, *keys):
+        value = mapping
+        for key in keys:
+            if not isinstance(value, dict):
+                return None
+            value = value.get(key)
+        return value
+
+    for stress_pair_id, fallback_level in stress_pairs:
+        pair_id = os.path.join("stress_tests", "illumination", stress_pair_id)
+        pair_rows = []
+        try:
+            source_raw, ref_raw, pair_info = load_lunar_pair(pair_id=pair_id, data_dir=data_dir)
+            source_path = os.path.join(data_dir, pair_id, "source.tif")
+            ref_path = os.path.join(data_dir, pair_id, "reference.tif")
+            source_stats = inspect_image_stats(source_raw)
+            ref_stats = inspect_image_stats(ref_raw)
+            scale_context = build_scale_context(pair_info)
+            stress_level = pair_info.get("stress_level", fallback_level)
+            stress_category = pair_info.get("stress_category", "illumination")
+            source_sun = pair_info.get("solar_incidence_angle_source_deg")
+            reference_sun = pair_info.get("solar_incidence_angle_ref_deg")
+        except Exception as error:
+            print(f"  [FAILED] {stress_pair_id}: unable to load pair ({error})", file=sys.stderr)
+            for variant_id, description, _, _, _ in preprocessing_variants:
+                pair_rows.append({
+                    "pair_id": stress_pair_id,
+                    "illumination_stress_level": fallback_level,
+                    "stress_category": "illumination",
+                    "source_solar_incidence_deg": None,
+                    "reference_solar_incidence_deg": None,
+                    "preprocessing": description,
+                    "source_keypoints": None,
+                    "reference_keypoints": None,
+                    "raw_matches": None,
+                    "good_matches": None,
+                    "inliers": None,
+                    "inlier_ratio_pct": None,
+                    "spatial_coverage_pct": None,
+                    "rmse_px": None,
+                    "median_px": None,
+                    "p95_px": None,
+                    "independent_validation": "N/A",
+                    "physical_scale_ratio_ref_to_source": None,
+                    "scale_metadata_consistent": None,
+                    "verdict": "FAILED",
+                    "failure": str(error)
+                })
+            experiment_rows.extend(pair_rows)
+            report_groups.append((stress_pair_id, pair_rows))
+            continue
+
+        for variant_id, description, low_percentile, high_percentile, use_clahe in preprocessing_variants:
+            variant_output = os.path.join(output_dir, stress_pair_id, variant_id)
+            os.makedirs(variant_output, exist_ok=True)
+            row = {
+                "pair_id": stress_pair_id,
+                "illumination_stress_level": stress_level,
+                "stress_category": stress_category,
+                "source_solar_incidence_deg": source_sun,
+                "reference_solar_incidence_deg": reference_sun,
+                "preprocessing": description,
+                "source_keypoints": None,
+                "reference_keypoints": None,
+                "raw_matches": None,
+                "good_matches": None,
+                "inliers": None,
+                "inlier_ratio_pct": None,
+                "spatial_coverage_pct": None,
+                "rmse_px": None,
+                "median_px": None,
+                "p95_px": None,
+                "independent_validation": "N/A",
+                "physical_scale_ratio_ref_to_source": scale_context["calculated_ref_to_source_ratio"],
+                "scale_metadata_consistent": scale_context["ratio_consistent"],
+                "verdict": "FAILED",
+                "failure": None
+            }
+            try:
+                source_display = create_display_visualization(
+                    source_raw, p_low=low_percentile, p_high=high_percentile
+                )
+                ref_display = create_display_visualization(
+                    ref_raw, p_low=low_percentile, p_high=high_percentile
+                )
+                if use_clahe:
+                    source_display = apply_clahe(source_display)
+                    ref_display = apply_clahe(ref_display)
+
+                kp_source, desc_source = extract_sift_features(source_display)
+                kp_ref, desc_ref = extract_sift_features(ref_display)
+                raw_matches = match_descriptors_knn(desc_source, desc_ref, k=2)
+                good_matches = filter_matches_lowe(raw_matches, ratio_threshold=ratio_threshold)
+                H, inliers_mask, ransac_metrics = estimate_homography(
+                    kp_source,
+                    kp_ref,
+                    good_matches,
+                    ransac_reproj_threshold=ransac_threshold
+                )
+                validation = ScientificValidator(
+                    min_inliers=10, min_ratio_pct=20.0, max_rmse_px=10.0
+                ).validate_registration(
+                    pair_id=stress_pair_id,
+                    source_path=source_path,
+                    ref_path=ref_path,
+                    pair_info=pair_info,
+                    source_stats=source_stats,
+                    ref_stats=ref_stats,
+                    kp_source=kp_source,
+                    kp_ref=kp_ref,
+                    desc_source=desc_source,
+                    desc_ref=desc_ref,
+                    raw_matches=raw_matches,
+                    good_matches=good_matches,
+                    H=H,
+                    inliers_mask=inliers_mask,
+                    ransac_metrics=ransac_metrics
+                )
+                row.update({
+                    "source_keypoints": len(kp_source),
+                    "reference_keypoints": len(kp_ref),
+                    "raw_matches": len(raw_matches),
+                    "good_matches": len(good_matches),
+                    "inliers": ransac_metrics.get("inlier_count"),
+                    "inlier_ratio_pct": ransac_metrics.get("inlier_ratio"),
+                    "spatial_coverage_pct": metric_or_none(validation, "gates", "SPATIAL_VALIDATION", "coverage_ratio_pct"),
+                    "rmse_px": metric_or_none(validation, "gates", "REPROJECTION_VALIDATION", "rmse_px"),
+                    "median_px": metric_or_none(validation, "gates", "REPROJECTION_VALIDATION", "median_px"),
+                    "p95_px": metric_or_none(validation, "gates", "REPROJECTION_VALIDATION", "p95_px"),
+                    "independent_validation": metric_or_none(validation, "gates", "INDEPENDENT_VALIDATION", "status"),
+                    "verdict": validation.get("final_verdict", "FAILED")
+                })
+                if H is not None and inliers_mask is not None:
+                    cv2.imwrite(os.path.join(variant_output, "inliers.jpg"), draw_matches_side_by_side(
+                        source_display, kp_source, ref_display, kp_ref, good_matches, match_color=(0, 255, 0)
+                    ))
+                    cv2.imwrite(os.path.join(variant_output, "corner_projection.png"), draw_corner_projection(
+                        ref_display, H, source_display.shape
+                    ))
+                    registered = warp_source_image(source_display, H, ref_display.shape)
+                    cv2.imwrite(os.path.join(variant_output, "registered.png"), registered)
+                    cv2.imwrite(os.path.join(variant_output, "overlay.png"), create_overlay_blend(
+                        registered, ref_display
+                    ))
+                    cv2.imwrite(os.path.join(variant_output, "before_after.png"), create_before_after_comparison(
+                        source_display, ref_display, registered
+                    ))
+            except Exception as error:
+                row["failure"] = str(error)
+                print(f"  [FAILED] {stress_pair_id}/{variant_id}: {error}", file=sys.stderr)
+            pair_rows.append(row)
+            experiment_rows.append(row)
+        report_groups.append((stress_pair_id, pair_rows))
+
+    csv_path = os.path.join(output_dir, "illumination_experiments.csv")
+    csv_fields = [
+        "pair_id", "illumination_stress_level", "stress_category",
+        "source_solar_incidence_deg", "reference_solar_incidence_deg", "preprocessing",
+        "source_keypoints", "reference_keypoints", "raw_matches", "good_matches",
+        "inliers", "inlier_ratio_pct", "spatial_coverage_pct", "rmse_px", "median_px",
+        "p95_px", "independent_validation", "physical_scale_ratio_ref_to_source",
+        "scale_metadata_consistent", "verdict", "failure"
+    ]
+    with open(csv_path, "w", newline="", encoding="utf-8") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=csv_fields)
+        writer.writeheader()
+        writer.writerows(experiment_rows)
+
+    valid_rows = [row for row in experiment_rows if row["inlier_ratio_pct"] is not None]
+    best_row = max(
+        valid_rows,
+        key=lambda row: (
+            row["verdict"] == "VALIDATED",
+            row["independent_validation"] == "PASS",
+            row["spatial_coverage_pct"] or 0.0,
+            row["inlier_ratio_pct"] or 0.0,
+            -(row["rmse_px"] if row["rmse_px"] is not None else float("inf"))
+        ),
+        default=None
+    )
+    report_lines = [
+        "# Phase 4 Step 4 Illumination Robustness Experiments",
+        "",
+        "## 1. Objective",
+        "Evaluate whether controlled radiometric preprocessing improves registration under synthetic illumination stress.",
+        "",
+        "## 2. Dataset Description",
+        "Four generated illumination pairs are evaluated: pair_i1 (10deg), pair_i2 (30deg), pair_i3 (50deg), and pair_i4 (70deg).",
+        "Raw scientific arrays remain unchanged; preprocessing is applied only to uint8 feature-registration representations.",
+        "",
+        "## 3. Experimental Methodology",
+        "Each pair uses identical source/reference preprocessing strategy, existing SIFT, matching, Lowe filtering, RANSAC, and the eight-gate ScientificValidator.",
+        "No illumination pass/fail gate or automatic resizing is introduced.",
+        "",
+        "## 4. All Experiments",
+        "| Pair | Stress | Preprocessing | KP source | KP ref | Raw | Good | Inliers | Ratio | Coverage | RMSE | Median | P95 | Independent | Scale | Consistent | Verdict |",
+        "| :--- | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | :--- | ---: | :---: | :--- |"
+    ]
+    for row in experiment_rows:
+        report_lines.append(
+            f"| {row['pair_id']} | {row['illumination_stress_level']} | {row['preprocessing']} | {row['source_keypoints']} | {row['reference_keypoints']} | {row['raw_matches']} | {row['good_matches']} | {row['inliers']} | {row['inlier_ratio_pct']} | {row['spatial_coverage_pct']} | {row['rmse_px']} | {row['median_px']} | {row['p95_px']} | {row['independent_validation']} | {row['physical_scale_ratio_ref_to_source']} | {row['scale_metadata_consistent']} | {row['verdict']} |"
+        )
+    report_lines.extend(["", "## 5. Results Grouped by Illumination Level"])
+    for stress_pair_id, rows in report_groups:
+        report_lines.append(f"### {stress_pair_id}")
+        for row in rows:
+            report_lines.append(
+                f"- {row['preprocessing']}: verdict={row['verdict']}, inlier ratio={row['inlier_ratio_pct']}, coverage={row['spatial_coverage_pct']}, RMSE={row['rmse_px']}, independent={row['independent_validation']}"
+            )
+    report_lines.extend(["", "## 6. Comparison of Preprocessing Strategies"])
+    for description in [variant[1] for variant in preprocessing_variants]:
+        rows = [row for row in experiment_rows if row["preprocessing"] == description and row["inlier_ratio_pct"] is not None]
+        mean_ratio = np.mean([row["inlier_ratio_pct"] for row in rows]) if rows else None
+        mean_coverage = np.mean([row["spatial_coverage_pct"] for row in rows]) if rows else None
+        report_lines.append(f"- {description}: measured mean inlier ratio={mean_ratio}, mean spatial coverage={mean_coverage}.")
+    report_lines.extend([
+        "",
+        "## 7. Best-Performing Strategy",
+        f"- Based on the measured verdict, independent validation, spatial coverage, inlier ratio, and RMSE ordering, the best row was `{best_row['pair_id']} / {best_row['preprocessing']}`." if best_row else "- No experiment produced sufficient numeric registration metrics to identify a best strategy.",
+        "",
+        "## 8. Illumination Robustness Observations",
+        "Performance is reported empirically from the measured registration metrics; no preprocessing method is assumed superior in advance.",
+        "",
+        "## 9. Failure and Breakpoint Observations",
+        f"{sum(1 for row in experiment_rows if row['failure'])} of {len(experiment_rows)} experiments recorded execution failures.",
+        "",
+        "## 10. Empirical Result Statement",
+        "These results are empirical and based on measured registration metrics from the existing scientific validation pipeline."
+    ])
+    with open(os.path.join(output_dir, "illumination_report.md"), "w", encoding="utf-8") as report_file:
+        report_file.write("\n".join(report_lines))
+    print(f"  [OK] Saved Phase 4 illumination CSV: {csv_path}")
+    print(f"  [OK] Saved Phase 4 illumination report: {os.path.join(output_dir, 'illumination_report.md')}")
+    return True
 
 
 def run_phase2_pipeline(
@@ -172,8 +435,16 @@ def run_phase3_lunar_pipeline(
         source_raw, ref_raw, pair_info = load_lunar_pair(pair_id=pair_id, data_dir=data_dir)
         source_sha256 = compute_file_sha256(source_path)
         ref_sha256 = compute_file_sha256(ref_path)
+
+        # Phase 4 Step 3: Build scale metadata/telemetry context.
+        scale_context = build_scale_context(pair_info)
+
         print(f"  [OK] Source SHA-256:    {source_sha256[:16]}...")
         print(f"  [OK] Reference SHA-256: {ref_sha256[:16]}...")
+        print(f"  [OK] Physical GSD ratio (Ref/Source): {scale_context['calculated_ref_to_source_ratio']:.4f}x")
+        print(f"  [OK] Metadata ratio consistency: {scale_context['ratio_consistent']}")
+        if scale_context["stress_category"] is not None:
+            print(f"  [OK] Synthetic stress: {scale_context['stress_category']} / {scale_context['stress_level']}x")
     except Exception as e:
         print(f"\n❌ [PHASE 3 FAILED] Dataset loading / checksum error: {e}", file=sys.stderr)
         return False
@@ -234,6 +505,8 @@ def run_phase3_lunar_pipeline(
         inliers_mask=mask_base,
         ransac_metrics=metrics_base
     )
+    # Phase 4 Step 3: Preserve scale telemetry in the validation report.
+    val_report["scale_context"] = scale_context
 
     val_json_path = os.path.join(output_dir, "validation_report.json")
     with open(val_json_path, "w", encoding="utf-8") as f:
@@ -327,7 +600,10 @@ def run_phase3_lunar_pipeline(
             "inlier_ratio_pct": round(met_e["inlier_ratio"], 2),
             "rmse_px": exp_val["gates"]["REPROJECTION_VALIDATION"]["rmse_px"] or "N/A",
             "coverage_pct": cov_pct,
-            "verdict": exp_val["final_verdict"]
+            "verdict": exp_val["final_verdict"],
+            "physical_scale_ratio_ref_to_source": scale_context["calculated_ref_to_source_ratio"],
+            "synthetic_stress_category": scale_context["stress_category"],
+            "synthetic_stress_level": scale_context["stress_level"],
         }
         exp_results.append(exp_record)
         print(f"  * {exp_id} ({exp_name}): Inliers={met_e['inlier_count']}, Ratio={met_e['inlier_ratio']:.1f}%, Coverage={cov_pct}%, Verdict={exp_val['final_verdict']}")
@@ -402,6 +678,9 @@ def run_phase3_lunar_pipeline(
         f"- **OHRC Source GSD Resolution**: {pair_info.get('source_resolution_m_per_px')} m/px (Dimensions: {source_stats['shape'][1]}x{source_stats['shape'][0]} px, Type: `{source_stats['dtype']}`)",
         f"- **LRO NAC Reference GSD Resolution**: {pair_info.get('reference_resolution_m_per_px')} m/px (Dimensions: {ref_stats['shape'][1]}x{ref_stats['shape'][0]} px, Type: `{ref_stats['dtype']}`)",
         f"- **Nominal Scale Ratio (Ref/Source)**: {pair_info.get('nominal_scale_ratio_ref_to_source')}x",
+        f"- **Calculated Physical Scale Ratio (Ref/Source)**: {scale_context['calculated_ref_to_source_ratio']:.4f}x",
+        f"- **Scale Metadata Consistency**: `{scale_context['ratio_consistent']}`",
+        f"- **Synthetic Scale Stress**: `{scale_context['stress_level']}x` ({scale_context['stress_category']})" if scale_context["stress_level"] is not None else "- **Synthetic Scale Stress**: `None` (baseline pair)",
         f"- **Solar Incidence Angles**: OHRC {pair_info.get('solar_incidence_angle_source_deg')}° vs LRO NAC {pair_info.get('solar_incidence_angle_ref_deg')}°",
         "",
         "## 4. Multi-Gate Validation Breakdown",
@@ -438,6 +717,14 @@ def run_phase3_lunar_pipeline(
 
     # Print console summary
     print(format_validation_summary_console(val_report))
+
+    # Phase 4 Step 4: Run controlled illumination robustness experiments.
+    run_phase4_illumination_experiments(
+        data_dir="data",
+        output_dir="outputs/phase4/illumination",
+        ratio_threshold=ratio_threshold,
+        ransac_threshold=ransac_threshold
+    )
 
     return True
 

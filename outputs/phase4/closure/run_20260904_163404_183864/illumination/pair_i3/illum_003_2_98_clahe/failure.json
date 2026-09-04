@@ -1,0 +1,13 @@
+{
+  "failure_stage": "geometry",
+  "pair_id": "pair_i3",
+  "stress_level": "50deg",
+  "preprocessing": "2%-98% Stretch + CLAHE",
+  "good_matches": 36,
+  "inliers": 7,
+  "inlier_ratio_pct": 19.444444444444446,
+  "spatial_coverage_pct": 44.4,
+  "rmse_px": 45.896,
+  "geometry_status": "FAIL",
+  "failure": null
+}

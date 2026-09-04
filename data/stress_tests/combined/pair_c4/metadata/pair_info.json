@@ -1,0 +1,54 @@
+{
+  "pair_id": "pair_c4",
+  "same_region_verified": true,
+  "source_mission": "Chandrayaan-2",
+  "source_instrument": "OHRC",
+  "source_product": "ch2_ohr_ncp_20200915T103000_d_img.tif",
+  "source_sha256": "7ce6685fa1d2c0b30303368610dac1008e7b03c6a9662db0bd0451f555e55c99",
+  "source_acquisition_time": "2020-09-15T10:30:00.000Z",
+  "source_resolution_m_per_px": 0.25,
+  "source_footprint": "72.85S, 43.10E to 73.05S, 43.40E (Boguslawsky E Region)",
+  "reference_mission": "LRO",
+  "reference_instrument": "NAC",
+  "reference_product": "M1105432100RE_CAL.tif",
+  "reference_sha256": "1243e4285b11841e8d5419d67dfeeaa00ba8b086512442bff344c6500ac779ac",
+  "reference_acquisition_time": "2015-06-22T14:15:00.000Z",
+  "reference_resolution_m_per_px": 0.5,
+  "reference_footprint": "72.80S, 43.00E to 73.10S, 43.50E (Boguslawsky E Region)",
+  "nominal_scale_ratio_ref_to_source": 2.0,
+  "solar_incidence_angle_source_deg": 64.5,
+  "solar_incidence_angle_ref_deg": 29.500000000000004,
+  "selection_notes": "Controlled synthetic lunar stress-test pair based on the shared generated terrain scene.",
+  "stress_category": "combined",
+  "stress_level": "scale_2x_illumination_70deg_viewpoint_30deg",
+  "illumination_difference_deg": 70.0,
+  "source_sun_azimuth_deg": 0.0,
+  "reference_sun_azimuth_deg": 105.86537439320115,
+  "viewpoint_rotation_deg": 30.0,
+  "ground_truth_transform": {
+    "source_to_reference_homography": [
+      [
+        0.43745425516444164,
+        -0.021777588303634993,
+        38.35124116033002
+      ],
+      [
+        0.01814456646392536,
+        0.46444845180470384,
+        -9.476686473489337
+      ],
+      [
+        2.63344801446638e-06,
+        -7.268316519927209e-05,
+        1.0
+      ]
+    ],
+    "scale_ratio_ref_to_source": 2.0,
+    "illumination_difference_deg": 70.0,
+    "source_sun_elevation_deg": 64.5,
+    "source_sun_azimuth_deg": 0.0,
+    "reference_sun_elevation_deg": 29.500000000000004,
+    "reference_sun_azimuth_deg": 105.86537439320115,
+    "viewpoint_rotation_deg": 30.0
+  }
+}

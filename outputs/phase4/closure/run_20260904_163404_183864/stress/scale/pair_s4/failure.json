@@ -1,0 +1,14 @@
+{
+  "pair_id": "pair_s4",
+  "stress_category": "scale",
+  "stress_level": "8x",
+  "failure_stage": "geometry_or_validation",
+  "failure_reason": "FAIL: Transformed area collapsed to 0.0% of reference frame (below 5% threshold).",
+  "good_matches": 26,
+  "inliers": 9,
+  "inlier_ratio_pct": 34.61538461538461,
+  "rmse_px": 11.3837,
+  "spatial_coverage_pct": 55.6,
+  "geometry_status": "FAIL: Transformed area collapsed to 0.0% of reference frame (below 5% threshold).",
+  "visualization_status": "unavailable"
+}
